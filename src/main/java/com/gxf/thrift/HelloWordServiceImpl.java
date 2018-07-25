@@ -19,6 +19,13 @@ public class HelloWordServiceImpl implements HelloWordService.Iface {
         } else {
             result += ", Now is " + new Date().toLocaleString();
         }
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         return result;
 
     }
