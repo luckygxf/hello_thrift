@@ -20,3 +20,7 @@ exception RequestException {
 service HelloWordService {
    string doAction(1: Request request) throws (1:RequestException qe); // 可能抛出异常。
 }
+
+service SayHiService{
+   string sayHi(1: Request request) throws (1:RequestException qe);
+}

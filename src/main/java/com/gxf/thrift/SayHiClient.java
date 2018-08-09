@@ -1,7 +1,10 @@
 package com.gxf.thrift;
 
 import org.apache.thrift.async.TAsyncClientManager;
-import org.apache.thrift.protocol.*;
+import org.apache.thrift.protocol.TBinaryProtocol;
+import org.apache.thrift.protocol.TCompactProtocol;
+import org.apache.thrift.protocol.TProtocol;
+import org.apache.thrift.protocol.TProtocolFactory;
 import org.apache.thrift.transport.TNonblockingSocket;
 import org.apache.thrift.transport.TNonblockingTransport;
 import org.apache.thrift.transport.TSocket;
@@ -9,7 +12,7 @@ import org.apache.thrift.transport.TTransport;
 
 import java.io.IOException;
 
-public class HelloWordClient {
+public class SayHiClient {
     public static void main(String[] args) throws Exception {
         main_asy();
     }
@@ -19,18 +22,18 @@ public class HelloWordClient {
         TProtocol protocol = new TBinaryProtocol(transport);
 
         // 创建client
-        com.gxf.thrift.HelloWordService.Client client = new com.gxf.thrift.HelloWordService.Client(protocol);
+        SayHiService.Client client = new SayHiService.Client(protocol);
 
         transport.open();  // 建立连接
 
         // 第一种请求类型
-        com.gxf.thrift.Request request = new com.gxf.thrift.Request()
-                .setType(com.gxf.thrift.RequestType.SAY_HELLO).setName("winwill2012").setAge(24);
-        System.out.println(client.doAction(request));
+        Request request = new Request()
+                .setType(RequestType.SAY_HELLO).setName("guanxiangfei").setAge(24);
+        System.out.println(client.sayHi(request));
 
         // 第二种请求类型
-        request.setType(com.gxf.thrift.RequestType.QUERY_TIME).setName("winwill2012");
-        System.out.println(client.doAction(request));
+        request.setType(RequestType.QUERY_TIME).setName("guanxiangfei");
+        System.out.println(client.sayHi(request));
 
         transport.close();  // 请求结束，断开连接
     }
@@ -44,13 +47,13 @@ public class HelloWordClient {
             TAsyncClientManager clientManager = new TAsyncClientManager();
             TNonblockingTransport transport = new TNonblockingSocket(address, port, clientTimeout);
             TProtocolFactory protocol = new TCompactProtocol.Factory();
-            HelloWordService.AsyncClient asyncClient = new HelloWordService.AsyncClient(protocol, clientManager, transport);
+            SayHiService.AsyncClient asyncClient = new SayHiService.AsyncClient(protocol, clientManager, transport);
             System.out.println("Client calls .....");
             MyCallback callBack = new MyCallback();
-            com.gxf.thrift.Request request = new com.gxf.thrift.Request()
-                    .setType(com.gxf.thrift.RequestType.SAY_HELLO).setName("guanxiangfei").setAge(24);
+            Request request = new Request()
+                    .setType(RequestType.SAY_HELLO).setName("guanxiangfei").setAge(24);
 
-            asyncClient.doAction(request, callBack);
+            asyncClient.sayHi(request, callBack);
             System.out.println("finish client call");
 
             while (true) {
